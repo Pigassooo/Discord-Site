@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harmony & Discord</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Monoton&family=Press+Start+2P&family=Lobster&family=Caveat+Brush&family=Bungee+Inline&family=Fredericka+the+Great&display=swap"
+    rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .background {
+      display: grid;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .block {
+      width: 100%;
+      height: 100%;
+    }
+
+    #text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      font-size: 4em;
+      color: white;
+      text-align: center;
+    }
+
+    .flicker-text {
+      animation: flicker 0.1s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: translate(-3px, -3px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(3px, 3px);
+      }
+    }
+
+    #popup-text {
+      display: none;
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      font-size: 3em;
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <p id="text">This is Orion!!! Pick MEEE!</p>
+  <p id="popup-text">Wait for what? Run!!!</p>
+
+  <script>
+    let changeCount = 0;
+    let intervalTime = 4000;
+    const fonts = [
+      'Monoton',
+      'Press Start 2P',
+      'Lobster',
+      'Caveat Brush',
+      'Bungee Inline',
+      'Fredericka the Great',
+      'Caveat',
+      'Anton',
+      'Shadows Into Light',
+      'Pacifico',
+      'Indie Flower',
+      'Abril Fatface',
+      'Permanent Marker',
+      'Amatic SC',
+      'Special Elite',
+      'Righteous',
+      'Faster One',
+      'Rock Salt',
+      'Rubik Moonrocks',
+      'Vampiro One',
+      'Press Start 2P',
+    ];
+
+    const colors = [
+      '#ff0000',
+      '#00ff00',
+      '#0000ff',
+      '#ffff00',
+      '#ff69b4',
+      '#8a2be2',
+      '#ff4500',
+      '#32cd32',
+      '#1e90ff',
+      '#ff8c00',
+      '#ff1493',
+      '#ff6347',
+      '#00ced1',
+      '#9400d3',
+      '#ff00ff',
+      '#00ff7f',
+      '#7fff00',
+      '#dc143c',
+      '#ffa500',
+      '#ffb6c1',
+    ];
+
+
+    function generateRandomColor() {
+      return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
+
+    function changeBackground() {
+      changeCount++;
+      const backgroundContainer = document.createElement('div');
+      backgroundContainer.className = 'background';
+
+      const gridSize = changeCount;
+      backgroundContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+      backgroundContainer.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
+
+      for (let i = 0; i < gridSize * gridSize; i++) {
+        const block = document.createElement('div');
+        block.className = 'block';
+        block.style.backgroundColor = generateRandomColor();
+        backgroundContainer.appendChild(block);
+      }
+
+      const existingBackground = document.querySelector('.background');
+      if (existingBackground) {
+        document.body.removeChild(existingBackground);
+      }
+      document.body.appendChild(backgroundContainer);
+    }
+
+    function flickerText() {
+      const textElement = document.getElementById('text');
+
+      let flickerInterval = setInterval(() => {
+        const randomFontIndex = Math.floor(Math.random() * (fonts.length + 1));
+        const randomColorIndex = Math.floor(Math.random() * (colors.length + 1));
+
+        textElement.style.fontFamily = fonts[randomFontIndex];
+        textElement.style.color = colors[randomColorIndex];
+      }, 70);
+
+      setTimeout(() => {
+        clearInterval(flickerInterval);
+        textElement.classList.add('flicker-text');
+      }, 800);
+    }
+
+    function startChange() {
+      changeBackground();
+      flickerText();
+
+      if (intervalTime > 1000) {
+        intervalTime -= 700;
+      }
+
+      setTimeout(startChange, intervalTime);
+    }
+
+    function showPopupText() {
+      const popupText = document.getElementById('popup-text');
+      popupText.style.display = 'block';
+    }
+
+    window.onload = function () {
+      const userResponse = confirm("The contents in the website may make you feel dizzy and nauseous. Do you wish to proceed?");
+      if (!userResponse) {
+        window.close();
+        return;
+      }
+
+      startChange();
+
+      setTimeout(showPopupText, 8000);
+      setTimeout(() => {
+        window.close();
+      }, 15000);
+    };
+  </script>
+</body>
+
+</html>
